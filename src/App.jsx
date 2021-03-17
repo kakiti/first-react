@@ -1,3 +1,4 @@
+/* eslint react-hooks/exhaustive-deps: off*/
 import React, { useEffect, useState } from "react";
 import ColoufulMessage from "./components/ColorfulMessage";
 // 関数を使って画面の要素であるコンポーネントを表現できる
@@ -15,15 +16,19 @@ const App = () => {
   };
   //stateを使用するにはuseStateを記述し、配列の分割代入をする
   //一つ目にstateとして使用する変数名、二つ目にそのstateを変更するための関数(setステート名が一般的)を決める。
-  useEffect(() => {}, []);
 
-  if (num > 0) {
-    if (num % 3 === 0) {
-      faceShowFlag || setFaceshowFlag(true);
-    } else {
-      faceShowFlag && setFaceshowFlag(false);
+  //useEffectの第二引数に配列をとると、中の処理は再レンダリングしても最初の一回のみ実行されるようになる。
+  //配列にstateを記述することで、useeffectはその配列のみ関心をもつようになる。
+  //最初の一回と指定したstateが外部で変化する時のみ中の処理を実行するようになる。（処理の分岐）
+  useEffect(() => {
+    if (num > 0) {
+      if (num % 3 === 0) {
+        faceShowFlag || setFaceshowFlag(true);
+      } else {
+        faceShowFlag && setFaceshowFlag(false);
+      }
     }
-  }
+  }, [num]);
 
   return (
     //Javascriptのなかでreturnしてその中でHTMLのタグを書いていくことをJSX記法という
@@ -38,8 +43,8 @@ const App = () => {
       <ColoufulMessage color="blue">お元気ですか？</ColoufulMessage>　
       <ColoufulMessage color="pink">元気です！</ColoufulMessage>　
       <button onClick={onClickCountUp}>カウントアップ</button>
-      　<br />　 <button onClick={onClickSwitchShowFlag}>on/off</button>　{" "}
-      <p>{num}</p>
+      　<br />
+      　 <button onClick={onClickSwitchShowFlag}>on/off</button>　 <p>{num}</p>
       {faceShowFlag && <p>!(^^)!</p>}
     </>
     //{}でかこむことで、そこだけJSの記法で書くことができる
